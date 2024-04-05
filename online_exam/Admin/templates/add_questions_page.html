@@ -1,0 +1,249 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+</style>
+
+<section>
+
+  <div class="body-wrapper h-100">
+    <div class="container-fluid">
+
+      <div class="card  mt-4"
+        style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);background-color: rgb(231, 247, 247);">
+        <div class="card-body">
+          <h4 class="text-center "><b>Add Questions</b></h4>
+          <center>
+            {% if messages %}
+            {% for message in messages %}
+            <label id="messageLabel" for="" class="text-center mt-4 mb-3 rounded-3 mx-3 text-success">{{message}}</label>
+            {% endfor %}
+            <script>
+              // Add a script to hide the messages after a few seconds
+              setTimeout(function () {
+                var messageLabel = document.getElementById('messageLabel');
+                if (messageLabel) {
+                  messageLabel.style.display = 'none';
+                }
+              }, 5000); // 5000 milliseconds = 5 seconds (adjust the time as needed)
+            </script>
+            {% endif %}
+          </center>
+          <div class="row mt-5">
+            <form action="{% url 'save_question' %}" method="post">
+              {% csrf_token %}
+              <div class="row mt-3 mb-3">
+                <div class="col-md-2"></div>
+                <div class="col-md-4 text-black">
+                  <label for="" >Choose an Exam to add questions</label>
+                </div>
+
+                <div class="col-md-4">
+                  <select type="text" class="form-select rounded" name="exam" id="exam">
+                    <option value="" >Select Exam</option>
+                    {% for e in exams_obj %}
+                    <option class="text-dark" value="{{e.id}}">{{e.exam_name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+              </div>
+
+              <div id="qa" style="display: none;">
+                <div class="row mt-3">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <label for="">Total Number of Questions : <span class="text-success" id="total_qn"></span></label>
+                  </div>
+                  <div class="col-md-4">
+                  </div>
+                </div>
+                <div class="row mt-3 mb-3">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <h5>Q.NO : <span id="qno"></span></h5>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <label for="">Question</label>
+                  </div>
+                  <div class="col-md-4">
+                    <textarea class="form-control" name="question" id="question" cols="30" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <label for="">Answer</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" name="answer" id="answer">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <label for="">Choice 1</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" name="ch1" id="ch1">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <label for="">Choice 2</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" name="ch2" id="ch2">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <label for="">Choice 3</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="text" class="form-control" name="ch3" id="ch3">
+                  </div>
+                </div>
+              </div>
+
+              <div id="message" style="display: none;">
+                <h5 class="text-center text-success" id="message_text"></h5>
+              </div>
+              <div class="row mt-5 mb-3">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <center><button type="submit" class="btn text-white" style="background-color: rgb(3, 75, 86);">Save
+                    </button></center>
+                </div>
+                <div class="col-md-4"></div>
+              </div>
+
+          </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- <div id="qa_table" class="card bg-white mt-4"
+        style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150); display: none;background-color: rgb(231, 247, 247);">
+        <div class="card-body"> -->
+          <table class="table table-responsive" >
+            <tr class="text-white" style="background-color: rgb(15,87,91);">
+              <th>Q.No</th>
+              <th>Question</th>
+              <th>Answer</th>
+              <th>Choice 1</th>
+              <th>Choice 2</th>
+              <th>Choice 3</th>
+              <th>Action</th>
+            </tr>
+           
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<script>
+  $(document).ready(function () {
+    $('#exam').on('change', function () {
+      console.log('exam');
+      $.ajax({
+        type: 'POST',
+        url: "{% url 'get_exam_data' %}",
+        data: {
+          ex_id: $('#exam').val(),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+
+        success: function (data) {
+          $('#qno').text(data.next_qno);
+          $('#total_qn').text(data.total_no_of_questions);
+
+          if (data.total_no_of_questions == data.questions_added) {
+            $('#qa').hide();
+            $('#message_text').text('All questions ware added!');
+            $('#message').show();
+          } else {
+            $('#qa').show();
+            $('#message').hide();
+          }
+
+          populateQuestionsTable(data.questions);
+          $('#qa_table').show();
+        }
+      });
+    });
+  });
+
+
+
+function populateQuestionsTable(questions) {
+    var table = $('.table');
+    table.find('tr:gt(0)').remove();  // Remove existing rows except the header row
+
+    $.each(questions, function(index, question) {
+        var row = $('<tr></tr>');
+        var qno = index + 1;  // Add 1 to the index to start numbering from 1
+        row.append('<td>' + qno + '</td>');  // Add the question number column
+        row.append('<td>' + question.question + '</td>');
+        row.append('<td>' + question.answer + '</td>');
+        row.append('<td>' + question.choice1 + '</td>');
+        row.append('<td>' + question.choice2 + '</td>');
+        row.append('<td>' + question.choice3 + '</td>');
+
+        // Add delete button to the action column
+        var deleteButton = $('<button class="btn btn-outline-danger btn-sm delete-btn">Remove</button>');
+        deleteButton.click(function() {
+            var questionId = question.id; 
+
+            if (confirm("Are you sure you want to remove this Question?")) {
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'delete_question' %}",
+                data: {
+                  question_Id: questionId,
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    // Remove the row from the table if deletion is successful
+                    if (response.success) {
+                        row.remove();
+                    } else {
+                        alert('Failed to delete question.');  // Show error message if deletion fails
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred while deleting the question.');  // Show error message
+                }
+            });
+          }
+        });
+        var actionCell = $('<td></td>');
+        actionCell.append(deleteButton);
+        row.append(actionCell);
+
+        table.append(row);
+    });
+}
+</script>
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+{% endblock %}

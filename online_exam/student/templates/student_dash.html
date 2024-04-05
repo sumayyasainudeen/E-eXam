@@ -1,0 +1,66 @@
+{% extends 'studentbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+</style>
+
+<section>
+
+  <div class="body-wrapper h-100" >
+    <div class="container-fluid" >
+
+      <div class="row mt-5 " >
+        <div class="col-md-4 mt-4">
+          <div class="card " style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);background-color: rgb(231, 247, 247);">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-9 ">
+                  <a class="stretched-link" href="{% url 'exam_list' %}">
+                    <h5 class="card-title mb-9 fw-semibold text-dark"><b>Exams Scheduled </b></h5>
+                    <h6 class="text-info"><b> Exams scheduled for today</b></h6>
+                  </a>
+                </div>
+                <div class="col">
+                  <a href="">
+                    <i class="fas fa-list-ul" style="font-size: 2em;color: rgb(15, 87, 91);"></i>
+                  </a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-4 mt-4">
+          <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-9 ">
+                  <a class="stretched-link" href="">
+                    <h5 class="card-title mb-9 fw-semibold text-dark"><b>Questions & Answers</b></h5>
+                  </a>
+                </div>
+                <div class="col">
+                  <a href="">
+                    <i class="fa fa-users text-info" style="font-size: 2em;"></i>
+                  </a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+</section>
+
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+
+
+{% endblock %}

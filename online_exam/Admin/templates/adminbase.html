@@ -1,0 +1,166 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-eXam</title>
+  <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}" />
+  <!-- Font Awesome CSS CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> -->
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+  <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans&family=Alumni+Sans+Inline+One&family=Arimo&family=Cairo+Play&family=Croissant+One&family=Lato&family=Nosifer&family=Open+Sans&family=Roboto&family=Roboto+Slab&display=swap" rel="stylesheet"> -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-...." crossorigin="anonymous"/> -->
+  
+  
+</head>
+<style>
+  body{
+    background-color: rgb(172, 212, 212);
+    /* background-image: url("/static/registration_login/images/dash.webp"); */
+
+  
+  }
+</style>
+
+
+<body class="">
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" 
+    data-sidebar-position="fixed" data-header-position="fixed" style="position: static;background: transparent;">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar border-0 " style="background-color: rgb(15, 87, 91);">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between p-4 mt-2 border-0 " style="background-color: rgb(15, 87, 91);" >
+          <a href="" class="text-nowrap logo-img mr-2" style="display: flex;">
+            <!-- <img src="{% static 'registration_login/images/favicon.png' %}" width="30" height="30" alt="" /> -->
+            <h3 class="text-white" ><b class="p-3" >E-eXam</b></h3>
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar " data-simplebar="" style="background-color: rgb(15, 87, 91);">
+          <ul id="sidebarnav ">
+           
+            <li class="sidebar-item mt-3 " style="background-color: rgb(231, 247, 247); border-radius: 4px;">
+              <a class="sidebar-link" href="{% url 'admindash' %}" aria-expanded="false" >
+                <i class="ti ti-layout-dashboard text-info"></i>
+              </span>
+              <span class="hide-menu text-dark"><b>Dashboard</b></span>
+              </a>
+            </li>
+            <li class="sidebar-item mt-3" style="background-color: rgb(231, 247, 247); border-radius: 4px;">
+              <a class="sidebar-link" href="{% url 'admin_all_exam_list' %}" aria-expanded="false" >
+                <i class="text-danger ti ti-cash"></i>
+              </span>
+              <span class="hide-menu text-dark"><b>All Exams</b></span>
+              </a>
+            </li>
+
+            <li class="sidebar-item mt-3" style="background-color: rgb(231, 247, 247); border-radius: 4px;">
+              <a class="sidebar-link" href="{% url 'students' %}" aria-expanded="false" >
+                <i class="text-success ti ti-cash"></i>
+              </span>
+              <span class="hide-menu text-dark"><b>Students</b></span>
+              </a>
+            </li>
+
+            <li class="sidebar-item mt-3" style="background-color: rgb(231, 247, 247); border-radius: 4px;">
+              <a class="sidebar-link" href="{% url 'exam_results' %}" aria-expanded="false" >
+                <i class="text-warning ti ti-cash"></i>
+              </span>
+              <span class="hide-menu text-dark"><b>Results</b></span>
+              </a>
+            </li>
+
+            <li class="sidebar-item mt-3 " style="background-color: rgb(231, 247, 247); border-radius: 4px;">
+              <a class="sidebar-link" href="{% url 'view_feedback' %}" aria-expanded="false" >
+                <i class="text-secondary ti ti-cash"></i>
+              </span>
+              <span class="hide-menu text-dark"><b>Feedback</b></span>
+              </a>
+            </li>
+      
+          </ul>
+          
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+      <!--  Header Start -->
+      <header class="app-header " style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);background-color: rgb(15, 87, 91);">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <ul class="navbar-nav">
+            <li class="nav-item d-block d-xl-none">
+              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                <i class=" ti ti-menu-2" style="color: rgb(254, 254, 254);"></i>
+              </a>
+            </li>
+           
+          </ul>
+          
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+              <li class="nav-item">
+                <a class="nav-link " href="">
+                  <i class="  ti ti-bell-ringing text-white" ></i>
+                  <div class="notification bg-white rounded-circle" ></div>
+                </a>
+              </li>
+
+              <li class="nav-item dropdown ">
+                <a class="nav-link  " href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                 
+                  <img src="{% static 'registration_login/images/default.jpg' %}" alt="" width="35" height="35" class="rounded-circle "
+                  style="border: 2px solid rgb(30, 96, 116);">
+                  <h5 class="text-white" > &nbsp;&nbsp;Admin</h5>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up " aria-labelledby="drop2">
+                  <div class="message-body">
+                    <a href="{% url 'admin_logout' %}" class="d-flex align-items-center gap-2 dropdown-item">
+                      <i class="fas fa-sign-out-alt text-info fs-6"></i>
+                      <p class="mb-0 fs-3">Logout</p>
+                    </a>
+
+                   
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+     
+      
+    </div>
+    {% block content %}{% endblock content %}
+
+  </div>
+  
+  <script src="{% static 'assets/libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/sidebarmenu.js' %}"></script>
+  <script src="{% static 'assets/js/app.min.js' %}"></script>
+  <script src="{% static 'assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+  <script src="{% static 'assets/libs/simplebar/dist/simplebar.js' %}"></script>
+  <script src="{% static 'assets/js/dashboard.js' %}"></script>
+</body>
+
+</html>

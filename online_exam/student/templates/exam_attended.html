@@ -1,0 +1,65 @@
+{% extends 'studentbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+</style>
+
+<section>
+
+  <div class="body-wrapper h-100" >
+    <div class="container-fluid" >
+
+      <div class="row mt-5 " >
+
+        {% for e in attempted_exams %}
+
+        <div class="col-md-4 mt-4">
+          <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-9 ">
+                  <a class="stretched-link" href="">
+                    <h5 class="card-title mb-9 fw-semibold text-dark"><b>{{e.exam.exam_name}}</b></h5>
+                    <h6>Exam Date : {{e.exam.exam_date}}</h6>
+                    {% if e.exam_status == 'Passed' %}
+                    <h6 class="text-dark">Status&nbsp;:&nbsp;<span class="text-success">{{e.exam_status}}<i class="fas fa-check-circle "></i></span></h6>
+                    {% else %}
+                    <h6 class="text-dark">Status&nbsp;:&nbsp;<span class="text-danger">{{e.exam_status}}<i class="fas fa-times-circle"></i></span></h6>
+                    {% endif %}
+                    <h6 class="text-dark">Score&nbsp;:&nbsp;{{e.percentage|floatformat:2}}%</h6>
+
+                  </a>
+                </div>
+                <div class="col">
+                  <a href="">
+                    {% if e.exam_status == 'Passed' %}
+                    <i class="fas fa-list-ul text-success" style="font-size: 2em;"></i>   
+                    {% else %}  
+                    <i class="fas fa-list-ul text-danger" style="font-size: 2em;"></i>  
+                    {% endif %}          
+                   </a>
+
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        
+        {% endfor %}
+      
+      </div>
+
+</section>
+
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+
+
+{% endblock %}

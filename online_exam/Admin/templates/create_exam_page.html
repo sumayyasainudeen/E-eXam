@@ -1,0 +1,160 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+</style>
+
+<section>
+
+  <div class="body-wrapper h-100">
+    <div class="container-fluid">
+
+      <div class="card  mt-4"
+        style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150); background-color: rgb(231, 247, 247);">
+        <div class="card-body">
+          <h4 class="text-center "><b>Exam Details</b></h4>
+          <center>
+            {% if messages %}
+            {% for message in messages %}
+            <label id="messageLabel" for="" class="text-center mt-4 mb-3 rounded-3 mx-3 text-success">{{message}}</label>
+            {% endfor %}
+            <script>
+              // Add a script to hide the messages after a few seconds
+              setTimeout(function () {
+                var messageLabel = document.getElementById('messageLabel');
+                if (messageLabel) {
+                  messageLabel.style.display = 'none';
+                }
+              }, 5000); // 5000 milliseconds = 5 seconds (adjust the time as needed)
+            </script>
+            {% endif %}
+          </center>
+          <div class="row">
+            <form action="{% url 'save_exam' %}" method="post">
+              {% csrf_token %}
+              <div class="row mt-3 mb-3">
+                <div class="col-md-2"></div>
+                <div class="col-md-4 mt-3">
+                  <input type="text" name="name" class="form-control text-dark" placeholder="Exam name" required>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <input type="date" name="date" class="form-control text-dark" required>
+                </div>
+                <div class="col-md-1"></div>
+              </div>
+
+              <div class="row mt-3 mb-3">
+                <div class="col-md-2"></div>
+                <div class="col-md-4 mt-3">
+                  <input type="text" name="no_of_qn" class="form-control text-dark" placeholder="Number of questions"
+                    required>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <input type="number" name="duration" class="form-control text-dark" placeholder="Duration in minuts"
+                    required>
+                </div>
+                <div class="col-md-1"></div>
+              </div>
+
+              <div class="row mt-3 mb-3">
+                <div class="col-md-2"></div>
+                <!-- <div class="col-md-4 mt-3">
+                  <input type="number" name="total_score" class="form-control text-dark" placeholder="Total score"
+                    required>
+                </div> -->
+                <div class="col-md-4 mt-3">
+                  <input type="number" name="passing_score" class="form-control text-dark" placeholder="No.of correct answers to pass"
+                    required>
+                </div>
+                <div class="col-md-1"></div>
+              </div>
+
+              <div class="row mt-3 mb-3">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <center><button type="submit" class="btn text-white" style="background-color: rgb(3, 75, 86);">Save
+                      Exam</button></center>
+                </div>
+                <div class="col-md-4"></div>
+              </div>
+
+          </div>
+
+          </form>
+        </div>
+      </div>
+    
+      {% if exams_obj %}
+      <!-- <div class="card  mt-4" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);background-color: rgb(231, 247, 247);">
+        <div class="card-body"> -->
+           <table class=" table table-responsive">
+            <tr class="text-white" style="background-color: rgb(15,87,91);">
+              <th>Exam Name</th>
+              <th>Scheduled Date</th>
+              <th>No. Of Questions</th>
+              <th>Duration</th>
+              <th>Total Score</th>
+              <th>Passing Score</th>
+              <th>Action</th>
+            </tr>
+            {% for e in exams_obj %}
+            <tr>
+              <td>{{e.exam_name}}</td>
+              <td>{{e.exam_date}}</td>
+              <td>{{e.no_of_questions}}</td>
+              <td>{{e.duration}}</td>
+              <td>{{e.total_score}}</td>
+              <td>{{e.passing_score}}</td>
+              <td><a href=""><button class="btn btn-outline-danger btn-sm remove-exam" data-exam-id="{{ e.id }}">Remove</button></a></td>
+            </tr>
+            {% endfor %}
+           </table>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</section>
+
+<script>
+ 
+</script>
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+<script>
+  $(document).ready(function() {
+        $('.remove-exam').click(function(e) {
+            e.preventDefault();
+            var examId = $(this).data('exam-id');
+            if (confirm("Are you sure you want to remove this exam?")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "delete_exam" %}',
+                    data: {
+                        'exam_id': examId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Reload the page or update the exam list as needed
+                            location.reload();
+                        } else {
+                            alert('Failed to delete exam: ' + response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

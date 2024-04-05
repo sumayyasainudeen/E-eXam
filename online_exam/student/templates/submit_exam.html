@@ -1,0 +1,161 @@
+{% extends 'studentbase.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+</style>
+
+<section>
+
+  <div class="body-wrapper h-100" >
+    <div class="container-fluid" >
+      {% if re_submit == 1 %}
+
+    <div class="row mt-5 text-center justify-content-center" >
+
+      <div class="col-md-8 mt-4">
+        <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);">
+          <div class="card-body">
+            <div class="row">
+                <a class="" href="">
+                  <i class="fas fa-graduation-cap fa-7x py-5"></i>
+                  <!-- <h1 class="text-success"><b>Yo</b></h1> -->
+                  <h6 text-danger>You have alredy submitted the exam before!</h6>
+                  <h6 class="py-3">You ware {{exam_result.exam_status}}  and have<span class="text-success">{{percentage_score|floatformat:2 }}%</span> Marks. </h6>
+                </a>
+
+                <center>
+                  <a href="{% url 'exam_list' %}"><button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Try Another Exam</span></button></a>
+                </center>
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    
+    </div>
+    {% else %}
+
+    {% if exam_result.exam_status == 'Passed' %}
+    <div class="row mt-5 text-center justify-content-center" >
+
+      <div class="col-md-8 mt-4">
+        <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);">
+          <div class="card-body">
+            <div class="row">
+                <a class="" href="">
+                  <i class="fas fa-graduation-cap fa-7x py-5"></i>
+                  <h1 class="text-success"><b>Congratulatons!</b></h1>
+                  <h6 class="py-3">You Are Successfully Completed The Exam With <span class="text-success">{{percentage_score|floatformat:2 }}%</span> Marks. </h6>
+                </a>
+
+                <center>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <a href="{% url 'review_result' exam.id %}"><button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Review Answers</span></button></a>
+                    </div>
+                    <div class="col-md-6">
+                      <a href="{% url 'exam_list' %}"><button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Try Another Exam</span></button></a>
+                    </div>
+                  </div>
+                </center>
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    
+    </div>
+     
+    {% else %}
+
+
+    <div class="row mt-5 text-center justify-content-center" >
+
+      <div class="col-md-8 mt-4">
+        <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);">
+          <div class="card-body">
+            <div class="row">
+                <i class="fas fa-times-circle fa-7x py-5"></i>
+                <h1 class="text-danger"><b>Sorry..You Are Failed!</b></h1>
+                <h6 class="py-3">You Got Only <span class="text-danger">{{percentage_score|floatformat:2 }}%</span> Marks. </h6>
+
+                <center>
+                  <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4 text-right">
+                      <a href="{% url 'review_result' exam.id %}"><button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Review Answers</span></button></a>
+                    </div>
+                    <div class="col-md-4 text-left">
+                      <a href="{% url 'exam_list' %}"><button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Try Another Exam</span></button></a>
+                    </div>
+                  </div>
+                </center>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    
+    </div>
+    
+    {% endif %}
+    {% endif %}
+
+   
+
+</section>
+
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+<style>
+  .button1 {
+    border-radius: 8px;
+    background-color: rgb(11, 68, 77);
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    padding: 6px;
+    width: 150px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button1 span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button1 span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button1:hover span {
+    padding-right: 20px;
+  }
+  
+  .button1:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+</style>
+
+
+{% endblock %}
+

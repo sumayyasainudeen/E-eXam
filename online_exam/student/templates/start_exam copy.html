@@ -1,0 +1,208 @@
+{% extends 'studentbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .modal-header .close {
+  width: 32px; /* Adjust the width as needed */
+  height: 32px; /* Adjust the height as needed */
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 24px; /* Adjust the font size as needed */
+  line-height: 1;
+  color: #000;
+}
+
+/* Optional: Change close button color on hover */
+.modal-header .close:hover {
+  color: #ff0000; /* Change to your desired hover color */
+}
+</style>
+
+
+<section>
+
+  <div class="body-wrapper h-100" >
+    <div class="container-fluid" >
+      <!-- Display the timer on your exam page -->
+      <div id="timer" style="text-align: center;font-weight: bold; "></div>
+      <input type="hidden" id="duration" value="{{exam.duration}}">
+      <div class="row mt-5 text-center justify-content-center" >
+
+        {% for q in all_questions %}
+        {% if q.id in attempted_questions %}
+       
+          <div class="col-md-2 mt-4">
+            <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(7, 84, 92), 0 6px 20px 0 rgb(7, 84, 92); ">
+              <div class="card-body">
+                <div class="row">
+                    <a class="stretched-link"  href=""  data-toggle="modal" data-target="#questionModal{{q.id}}" >
+  
+                      <i class="fas fa-check-circle fa-3x mb-2" style="color: rgb(250, 240, 55);"></i>
+                      <h5 class="card-title fw-semibold text-dark"><b>QNO. {{forloop.counter}}</b></h5>
+                    </a>
+                  </div>
+                  
+                </div>
+                
+              </div>
+            </div>
+            {% else %}
+            <div class="col-md-2 mt-4">
+              <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(7, 84, 92), 0 6px 20px 0 rgb(7, 84, 92); ">
+                <div class="card-body">
+                  <div class="row">
+                      <a class="stretched-link"  href=""  data-toggle="modal" data-target="#questionModal{{q.id}}" >
+    
+                        <i class="fas fa-question-circle fa-3x mb-2" style="color: rgb(6, 91, 104);"></i>
+                        <h5 class="card-title fw-semibold text-dark"><b>QNO. {{forloop.counter}}</b></h5>
+                      </a>
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+              </div>
+              {% endif %}
+       {% endfor %}
+
+      </div>
+      
+      <center>
+        <a href="{% url 'submit_exam' exam.id %}"><button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Submit Exam</span></button></a>
+      </center>
+
+</section>
+
+<!-- Modal -->
+
+{% for q in all_questions %}
+
+<div class="modal fade" id="questionModal{{ q.id }}" tabindex="-1" role="dialog" aria-labelledby="questionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content text-white p-3" style="background-color: rgb(5, 71, 77);">
+      <form id="questionForm" action="{% url 'submit_answer' q.id %}"  method="POST">
+        {% csrf_token %}
+        <div class="modal-header  text-white">
+          <h5 class="modal-title text-white" id="questionModalLabel">Question {{ forloop.counter }}</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <hr>
+        <div class="modal-body">
+          <p class="mb-4">QN&nbsp;:&nbsp; &nbsp;{{ q.question }}</p>
+          {% for option in q.shuffled_options %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="choice" id="choice" value="{{ option }}">
+              <label class="form-check-label" for="choice">
+                {{ option }}
+              </label>
+            </div>
+          {% endfor %}
+          <input type="hidden" name="question_id" value="">
+        </div>
+        <hr>
+        <div class="modal-footer">
+          <button type="submit" class="btn text-white" style="background-color: rgb(74, 133, 139);width: 350px;width: 150px;">Submit Answer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+User
+<style>
+  .button1 {
+    border-radius: 8px;
+    background-color: rgb(11, 68, 77);
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    padding: 6px;
+    width: 150px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button1 span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button1 span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button1:hover span {
+    padding-right: 20px;
+  }
+  
+  .button1:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+</style>
+
+<script>
+  // Function to display the timer
+  function displayTimer(examDuration) {
+    var minutes = Math.floor(examDuration / 60);
+    var seconds = examDuration % 60;
+    var timerDisplay = document.getElementById('timer');
+
+    // Format the timer display
+    timerDisplay.innerHTML = 'Time Left: ' + minutes + 'm ' + seconds + 's';
+  }
+
+  // Function to countdown the timer
+  function countdownTimer(examDuration) {
+    // Update the timer display every second
+    var intervalId = setInterval(function() {
+      examDuration--;
+      displayTimer(examDuration);
+
+      // If the time is up, trigger an alert and submit the exam
+      if (examDuration <= 0) {
+        clearInterval(intervalId); // Stop the countdown
+        alert('Time is up! Your exam will be submitted automatically.');
+        submitExam(); // Submit the exam
+      }
+    }, 1000);
+  }
+
+  // Function to submit the exam
+  function submitExam() {
+    // Redirect to the submit exam URL
+    window.location.href = "{% url 'submit_exam' exam.id %}";
+  }
+
+  // Call the countdownTimer function when the page loads
+  window.onload = function() {
+    // Get the duration from the hidden field
+    var examDuration = parseInt(document.getElementById('duration').value) * 60;
+    // var examDuration = 1 * 60;
+    console.log(examDuration);
+    countdownTimer(examDuration);
+  };
+</script>
+
+
+{% endblock %}

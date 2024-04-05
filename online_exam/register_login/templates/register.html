@@ -1,0 +1,203 @@
+{% extends 'RL_base.html' %}
+{% load static %}
+
+{% block title %}
+E-eXam
+{% endblock %}
+
+{% block body %}
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<style>
+    .button1 {
+      border-radius: 8px;
+      background-color: rgb(6, 40, 45);
+      border: none;
+      color: #ffffff;
+      text-align: center;
+      font-size: 18px;
+      padding: 6px;
+      width: 150px;
+      transition: all 0.5s;
+      cursor: pointer;
+      margin: 5px;
+    }
+    
+    .button1 span {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: 0.5s;
+    }
+    
+    .button1 span:after {
+      content: '\00bb';
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      right: -20px;
+      transition: 0.5s;
+    }
+    
+    .button1:hover span {
+      padding-right: 20px;
+    }
+    
+    .button1:hover span:after {
+      opacity: 1;
+      right: 0;
+    }
+    
+</style>
+
+
+
+<div class="row mt-5 ">
+	<div class="col-md-1 mt-3"></div>
+	<div class="col-md-5 mt-5 rounded-3">
+		<!-- <div class="card mb-3 shadow mb-5 rounded-3" style="max-width: 100%;background-color: rgb(11, 62, 68);"> -->
+			<div class="row g-0">
+			  <div class="text-white rounded-3" style="background-color: rgba(6, 40, 45,0.7);"
+        data-aos="fade-up">
+				<div class="card-body py-5 ">
+					<div class="row mt-3">
+						<h2 class="text-center">
+							Student Registration
+						</h2>
+						{% if messages %}
+							{% for message in messages %}
+								<label id="messageLabel" for="" class="text-center mt-4 mb-3 rounded-3 mx-3 text-danger" >{{message}}</label>
+							{% endfor %}
+							<script>
+								// Add a script to hide the messages after a few seconds
+								setTimeout(function() {
+									var messageLabel = document.getElementById('messageLabel');
+									if (messageLabel) {
+										messageLabel.style.display = 'none';
+									}
+								}, 5000); // 5000 milliseconds = 5 seconds (adjust the time as needed)
+							</script>
+						{% endif %}
+					</div>
+					<div class="row mt-3 rounded-3 px-4">
+						<form action="{% url 'register_submit' %}" method="post" enctype="multipart/form-data">
+							{% csrf_token %}
+
+							<input type="text" id="name" name="name" class="form-control mt-4 mb-3 rounded-3" placeholder="Full Name"  required>
+
+							<input type="text" id="address" name="address" class="form-control mt-4 mb-3 rounded-3" placeholder="Address"  required>
+
+							<input type="email" id="email" name="email" class="form-control mt-4 mb-3 rounded-3" placeholder="Email"  required>
+							<div class="text-danger" id="emailError" ></div>
+
+							<input type="text" id="phone" name="phone" class="form-control mt-4 mb-3 rounded-3" placeholder="Phone Number"   required>
+							<div class="text-danger" id="phError" ></div>
+
+              <!-- <div class="text-success" id="phmsg" style="display: none;">*Use phone number as Username</div> -->
+							<input type="password" id="pass" name="password" class="form-control mt-4 mb-3 rounded-3" placeholder="Password" 
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+              <p class="text-primary" style="font-size: 12px;margin-top: 0px;">*password must be at least 8 characters long and should include uppercase , lowercase, special characters and numbers.</p>
+
+							<input type="file" id="image" name="image" accept="image/*" class="form-control"
+                                    style="margin-top: 10px; margin-bottom: 20px;">
+							
+							<center>
+								<div class="row mt-2 mb-2">
+									<a href=""><button type="submit" class="button1 mb-5"><i class="fas fa-user"></i><span class="ms-1">Register</span></button></a>
+								</div>
+							</center>
+							<center>
+								<h6 class="text-warning mt-3" >Alredy have an account?  <a href="{% url 'login_page' %}" style="text-decoration: none;" >
+                  <span class="text-info">Login here...</span></a>		</h6>
+							</center>
+
+						</form>
+						<div class="row mt-3 text-center">
+							<div class="col-lg">
+								<!-- <button class="btn btn-outline-info button1 text-dark mt-1" style="text-decoration: none;" ><a href="" >Register </a></button> -->
+							</div>
+						</div>
+					</div>
+				  
+				</div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-2 mt-3"></div>
+</div>
+
+
+<script>
+
+    
+
+    $(document).on('change', '#email', function() {
+        console.log('email');
+        var email = $(this).val();
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            $('#emailError').text('Please enter a valid email address');
+        } else {
+            $('#emailError').text('');
+        }
+    });
+
+	// check if email already exist or not
+    $(document).ready(function () {
+        $('#email').on('input', function () {
+            var email = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'check_email' %}",  
+                data: {
+                    'email': email
+                },
+                success: function (data) {
+                    if (data.exists) {
+                        $('#emailError').text('Email already exists..');
+                    } else {
+                        $('#emailError').text('');
+                    }
+                }
+            });
+        });
+    });
+
+
+    // check if phone number already exist or not
+    $(document).ready(function () {
+        $('#phone').on('input', function () {
+            var ph = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'check_phone' %}",  
+                data: {
+                    'ph': ph
+                },
+                success: function (data) {
+                    if (data.exists) {
+                        $('#phError').text('Phone number already exists..');
+                    } else {
+                        $('#phError').text('');
+                    }
+                }
+            });
+        });
+    });
+
+
+  
+    $(document).on('input', '#phone', function() {
+      var ph = $(this).val();
+      if (ph.length > 0) {
+            phmsg.style.display = 'block';
+        } else {
+            phmsg.style.display = 'none';
+        }
+    });
+  </script>
+
+{% endblock %}

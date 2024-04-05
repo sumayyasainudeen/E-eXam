@@ -1,0 +1,134 @@
+{% extends 'studentbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+</style>
+
+<section>
+
+  <div class="body-wrapper h-100" >
+    <div class="container-fluid" >
+
+      <div class="row " >
+
+
+          <div class="card bg-white mt-3" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);background-color: rgb(231, 247, 247);">
+            <div class="card-body">
+              <div class="row">
+                    <h3 class="mt-3 text-dark text-center"><b>{{exam.exam_name}}</b></h3>
+                    <h6 class="text-center">Scheduled Date : {{exam.exam_date}}</h6>
+                    <h6 class="mt-5">Dear {{student_det.name}},</h6>
+
+                    <p class="text-justify mt-3">Welcome to the <span class="h5"><b>E-eXam!</b></span> </p>
+                     <p class="text-justify mb-3">We're excited to have you participate in this exam. This assessment is designed 
+                      to evaluate your understanding of this topic. It consists of multiple-choice questions covering various aspects of the subject matter. The questions are designed to 
+                      test your understanding and application of key concepts.</p>
+                      <h6 class="text-success mb-5"><i>We wish you the best of luck!</i></h6>
+                
+              </div>
+              <div class="row mb-5">
+                <div class="col-md-6">
+                  <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);background-color: rgb(231, 247, 247);">
+                    <div class="card-body">
+                      <div class="row">
+                        <h5 class="card-title mb-9 fw-semibold text-dark"><b>Instructions:</b></h5>
+                        <ul style="list-style-type: disc;">
+                          <li>
+                            Read each question carefully before selecting your answer.
+                          </li>
+                          <li>
+                            You can navigate between questions and select questions in any order .
+                          </li>
+                          <li>
+                            Ensure that you have answered all questions before submitting the exam.
+                          </li>
+                          <li>
+                            Once you submit the exam, you will not be able to go back and change your answers.
+                          </li>
+                          
+                        </ul> 
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 ">
+                  <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);background-color: rgb(231, 247, 247);">
+                    <div class="card-body">
+                      <div class="row">
+                        <h5 class="card-title mb-9 fw-semibold text-dark"><b>Exam Criteria:</b></h5>
+                            <ul style="list-style-type: disc;">
+                              <li>Duration: The exam is timed and you will have <span class="text-info h5">{{exam.duration}} minuts </span>to complete it. A timer will be displayed on the 
+                                screen to help you keep track of the time remaining.</li>
+                              <li>Number of Questions: There are <span class="text-info h5">{{exam.no_of_questions}} questions </span>  in total.</li>
+                              <li>Passing Score: To pass the exam, you must mark <span class="text-info h5">{{exam.passing_score}} or higher </span>  correct answers.</li>
+                          </ul>
+                           
+                        </div>
+                       
+                      </div>
+                    </div>
+                  </div>
+                 
+              </div>
+              <center>
+                <a href="{% url 'start_exam' exam.id %}"><button type="submit" class="button1 mb-5"><i class="fas fa-book"></i><span class="ms-1">Start Exam</span></button></a>
+              </center>
+            </div>
+          </div>
+       
+      </div>
+
+</section>
+
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+<style>
+  .button1 {
+    border-radius: 8px;
+    background-color: rgb(6, 40, 45);
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    padding: 6px;
+    width: 150px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button1 span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button1 span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button1:hover span {
+    padding-right: 20px;
+  }
+  
+  .button1:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+</style>
+
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .card.bg-white:hover {
+    background-color: #f0f0f0; /* Change background color on hover */
+    transition: background-color 0.3s ease; /* Add transition for smooth effect */
+  }
+
+  .card-title:hover {
+    color: #007bff; /* Change text color of title on hover */
+    text-decoration: none; /* Remove underline on hover */
+  }
+</style>
+<section>
+
+  <div class="body-wrapper h-100" >
+    <div class="container-fluid" >
+
+      <div class="row mt-5 " >
+        <div class="col-md-4 mt-4">
+          <div class="card " style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);
+          background-color: rgb(231, 247, 247);">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-9 ">
+                  <a class="stretched-link text-white" href="{% url 'create_exam_page' %}">
+                    <h5 class="card-title mb-9 fw-semibold text-dark"><b>Create New Exam</b></h5>
+                    <h6 class="text-dark"><b>Basic Details</b></h6>
+                  </a>
+                </div>
+                <div class="col">
+                  <a href="">
+                    <i class="fas fa-list-ul text-dark" style="font-size: 2em;"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mt-4">
+          <div class="card text-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);
+          background-color: rgb(231, 247, 247);">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-9 ">
+                  <a class="stretched-link " href="{% url 'add_questions_page' %}">
+                    <h5 class="card-title mb-9 fw-semibold text-dark"><b>Add Questions & Answers</b></h5>
+                  </a>
+                </div>
+                <div class="col">
+                  <a href="">
+                    <i class="fas fa-list-ul text-dark" style="font-size: 2em;"></i>
+                  </a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</section>
+
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+
+
+{% endblock %}

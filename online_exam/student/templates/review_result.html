@@ -1,0 +1,170 @@
+{% extends 'studentbase.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  .modal-header .close {
+  width: 32px; /* Adjust the width as needed */
+  height: 32px; /* Adjust the height as needed */
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 24px; /* Adjust the font size as needed */
+  line-height: 1;
+  color: #000;
+}
+
+/* Optional: Change close button color on hover */
+.modal-header .close:hover {
+  color: #ff0000; /* Change to your desired hover color */
+}
+</style>
+
+<section>
+
+  <div class="body-wrapper h-100" >
+    <div class="container-fluid" >
+      
+
+    <div class="row mt-5 text-center justify-content-center" >
+
+      <div class="col-md-8 mt-4">
+        <div class="card bg-white" style="box-shadow: 0 10px 10px rgb(94, 143, 150), 0 6px 20px 0 rgb(94, 143, 150);">
+          <div class="card-body">
+            <div class="row ">
+               <h3 class="pb-3"><b>Review Your Answers</b></h3>
+
+               <center>
+                {% if messages %}
+                {% for message in messages %}
+                <label id="messageLabel" for="" class="text-center mt-4 mb-3 rounded-3 mx-3 text-success">{{message}}</label>
+                {% endfor %}
+                <script>
+                  // Add a script to hide the messages after a few seconds
+                  setTimeout(function () {
+                    var messageLabel = document.getElementById('messageLabel');
+                    if (messageLabel) {
+                      messageLabel.style.display = 'none';
+                    }
+                  }, 5000); // 5000 milliseconds = 5 seconds (adjust the time as needed)
+                </script>
+                {% endif %}
+              </center>
+
+               <hr class="pb-3">
+               {% for q in all_questions %}
+                    <h6 style="text-align: left;">Qn {{forloop.counter}} : {{q.question}}</h6>
+                    {% if q.answer == q.marked_ans %}
+                          <h6 class="" style="text-align: left;">Your ans :<span class="text-success">{{q.marked_ans}}</span></h6>
+                    {% else %}
+                          <h6 class="" style="text-align: left;">Your ans : <span class="text-danger">{{q.marked_ans}}</span> </h6>
+                    {% endif %}
+                    <h6 class="pb-3" style="text-align: left;">Correct ans : {{q.answer}}</h6>
+
+               {% endfor %}
+
+                
+                <center>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <a href="" data-toggle="modal" data-target="#feedbackModal">
+                        <button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Add Feedback</span></button>
+                      </a>
+                    </div>
+                    <div class="col-md-6">
+                      <a href="{% url 'exam_list' %}"><button type="submit" class="button1 my-5" style="width: 200px;"><i class="fas fa-book"></i><span class="ms-1">Try Another Exam</span></button></a>
+                    </div>
+                  </div>
+                </center>
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    
+    </div>
+     
+  
+    <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="questionModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content text-white p-3" style="background-color: rgb(5, 71, 77);">
+          <form id="questionForm" action="{% url 'add_feedback' exam.id %}"  method="POST">
+            {% csrf_token %}
+            <div class="modal-header  text-white">
+              <h5 class="modal-title text-white" id="questionModalLabel">
+                Add Feedback
+              </h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <hr>
+            <div class="modal-body">
+             <textarea class="form-control" name="feedback" id="feedback" cols="50" rows="3" placeholder="type your feedback here.."></textarea>
+             
+              
+            </div>
+            <hr>
+            <div class="modal-footer">
+              <button type="submit"  class="btn text-white" style="background-color: rgb(74, 133, 139);width: 350px;width: 150px;" id="answer_submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+</section>
+
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+<style>
+  .button1 {
+    border-radius: 8px;
+    background-color: rgb(11, 68, 77);
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    padding: 6px;
+    width: 150px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button1 span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button1 span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button1:hover span {
+    padding-right: 20px;
+  }
+  
+  .button1:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+</style>
+
+
+{% endblock %}
+

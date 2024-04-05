@@ -1,0 +1,345 @@
+{% extends 'studentbase.html' %}
+{% load static %}
+{% block content %}
+<head>
+  <script src= 
+        "https://code.jquery.com/jquery-3.6.0.min.js" 
+        integrity= 
+"sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+        crossorigin="anonymous"> 
+    </script>
+</head>
+<style>
+  .card:hover {
+    transform: translateY(-5px); /* Move the card up by 5px on hover */
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+  .modal-header .close {
+  width: 32px; /* Adjust the width as needed */
+  height: 32px; /* Adjust the height as needed */
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 24px; /* Adjust the font size as needed */
+  line-height: 1;
+  color: #000;
+}
+
+/* Optional: Change close button color on hover */
+.modal-header .close:hover {
+  color: #ff0000; /* Change to your desired hover color */
+}
+</style>
+
+
+<section>
+  <div class="body-wrapper h-100">
+      <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2"><div class="text-white p-2 " id="timer" style="text-align: center; font-weight: bold;
+              background-color: rgb(6, 91, 104);border-radius: 3px;width: 200px;"></div>
+            </div>
+          </div>
+          
+          <input type="hidden" id="duration" value="{{exam.duration}}">
+          <div class="row  justify-content-center my-4 ">
+              <div class="col-12 col-md-8 p-5" style="background-color: rgb(240, 254, 255);
+              box-shadow: 0 10px 10px rgb(7, 84, 92), 0 6px 20px 0 rgb(7, 84, 92); border-radius: 5px;">
+                  <div class="row justify-content-center">
+                    <h6>*Click on each question pallet, read question carefully, mark your option and submit the answer.</h6>
+                    <h6 >*You can re-open each question and re-check your answer before submitting the exam.</h6>
+                    <h6 class="pb-2">*Once you submitted the exam you cannot go back.</h6>
+
+                      {% for q in all_questions %}
+                      <div class="col-md-3">
+                        <div class="card my-3"  style="box-shadow: 0 10px 10px rgb(7, 84, 92), 0 6px 20px 0 rgb(7, 84, 92);" id="question_{{ q.id }}">
+                            <div class="card-body text-center">
+                                <a class="stretched-link" href="" data-toggle="modal" data-target="#questionModal{{q.id}}">
+                                    {% if q.id in attempted_questions %}
+                                    <i class="fas fa-check-circle fa-3x mb-2 text-center" style="color: rgb(250, 240, 55);"></i>
+                                    {% else %}
+                                    <i class="question-icon fas fa-question-circle fa-3x mb-2 text-center" style="color: rgb(6, 91, 104);"></i>
+                                    {% endif %}
+                                    <h5 class="card-title fw-semibold text-dark"><b>QN. {{forloop.counter}}</b></h5>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                      {% endfor %}
+
+                  </div>
+              </div>
+          </div>
+          <center>
+              <a href="{% url 'submit_exam' exam.id %}" >
+                  <button type="submit" class="button1 m3-5" style="width: 200px;" id="submit_exam_button">
+                      <i class="fas fa-book"></i><span class="ms-1">Submit Exam</span>
+                  </button>
+              </a>
+          </center>
+      </div>
+  </div>
+</section>
+
+
+<!-- Modal -->
+
+{% for q in all_questions %}
+
+<div class="modal fade" id="questionModal{{ q.id }}" tabindex="-1" role="dialog" aria-labelledby="questionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content text-white p-3" style="background-color: rgb(5, 71, 77);">
+      <form id="questionForm" action=""  method="POST">
+        {% csrf_token %}
+        <div class="modal-header  text-white">
+          <h5 class="modal-title text-white" id="questionModalLabel">Question {{ forloop.counter }}</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <hr>
+        <div class="modal-body">
+          <p class="mb-4">QN&nbsp;:&nbsp; &nbsp;{{ q.question }}</p>
+          {% for option in q.shuffled_options %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="choice" id="choice" value="{{ option }}">
+              <label class="form-check-label" for="choice">
+                {{ option }}
+              </label>
+            </div>
+          {% endfor %}
+          <input type="hidden" name="question_id" id="question_id" value="{{q.id}}">
+        </div>
+        <hr>
+        <div class="modal-footer">
+          <button type="button"  class="btn text-white" style="background-color: rgb(74, 133, 139);width: 350px;width: 150px;" id="answer_submit">Submit Answer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+<style>
+ 
+  .button1 {
+    border-radius: 8px;
+    background-color: rgb(11, 68, 77);
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    padding: 6px;
+    width: 150px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button1 span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button1 span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button1:hover span {
+    padding-right: 20px;
+  }
+  
+  .button1:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+</style>
+
+
+
+ <script>
+  // Function to display the timer
+  function displayTimer(examDuration) {
+    var minutes = Math.floor(examDuration / 60);
+    var seconds = examDuration % 60;
+    var timerDisplay = document.getElementById('timer');
+
+    // Format the timer display
+    timerDisplay.innerHTML = 'Time Left: ' + minutes + 'm ' + seconds + 's';
+  }
+
+  // Function to countdown the timer
+  function countdownTimer(examDuration) {
+    // Update the timer display every second
+    var intervalId = setInterval(function() {
+      examDuration--;
+      displayTimer(examDuration);
+
+      // If the time is up, trigger an alert and submit the exam
+      if (examDuration <= 0) {
+        clearInterval(intervalId); // Stop the countdown
+        alert('Time is up! Your exam will be submitted automatically.');
+        submitExam(); // Submit the exam
+      }
+    }, 1000);
+
+    // Disable browser's back button
+    disableBackButton();
+  }
+
+  // Function to submit the exam
+  function submitExam() {
+    // Redirect to the submit exam URL
+    window.location.href = "{% url 'submit_exam' exam.id %}";
+  }
+
+  // Function to disable the browser's back button
+  function disableBackButton() {
+    $(document).ready(function() { 
+            function disableBack() { 
+                window.history.forward() 
+            } 
+            window.onload = disableBack(); 
+            window.onpageshow = function(e) { 
+                if (e.persisted) 
+                    disableBack(); 
+            } 
+        }); 
+  }
+
+  // Call the countdownTimer function when the page loads
+  window.onload = function() {
+    // Get the duration from the hidden field
+    var examDuration = parseInt(document.getElementById('duration').value) * 60;
+    countdownTimer(examDuration);
+  };
+</script>
+
+
+
+<script src="http://www.w3.org/2000/svg" src="https://www.gstatic.com/charts/loader.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+
+
+<script>
+  $(document).on("click", "#answer_submit", function(){
+    console.log('submit');
+
+    var selectedOption = $(this).closest('.modal-content').find("input[name='choice']:checked").val();
+    var questionId = $(this).closest('.modal-content').find("#question_id").val();
+
+    console.log('Question ID: ' + questionId);
+    console.log('Selected Option: ' + selectedOption);
+
+    if (selectedOption) {
+      
+        $.ajax({
+
+            type : 'POST',
+            url:"{% url 'submit_answer' %}",
+            data:{
+                qid : questionId,
+                choice: selectedOption, 
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message);
+                    $('#questionModal'+questionId).modal('hide'); // Close the modal
+                    
+                    var attemptedQuestions = response.attempted_questions;
+
+                    console.log(attemptedQuestions); 
+
+                    attemptedQuestions.forEach(function(attemptedQuestionId) {
+                        var cardSelector = '#question_' + attemptedQuestionId;
+                        console.log(cardSelector);
+
+                        var iconSelector = cardSelector + ' .question-icon';
+                        console.log('icon'+ iconSelector);
+
+                        // Change the icon and color
+                        $(iconSelector).removeClass('fa-question-circle').addClass('fa-check-circle');
+                        $(iconSelector).css('color', 'rgb(250, 240, 55)');
+
+                        // $(cardSelector).addClass('attempted');
+                    });
+                              
+                } else {
+                    alert(response.message);
+                }
+            },
+
+       
+        }); 
+      } else {
+      alert("Please select an option before submitting.");
+    }  
+    });
+  
+</script>
+
+<script type="text/javascript">
+  // Disable right-clicking
+  document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+  });
+
+  // Prevent navigation away from the exam page
+  var beforeUnloadHandler = function(event) {
+      event.returnValue = "Are you sure you want to leave?";
+  };
+  window.addEventListener('beforeunload', beforeUnloadHandler);
+
+  // Detect if the user switches to another tab
+  var hidden, visibilityChange; 
+  if (typeof document.hidden !== "undefined") { 
+      hidden = "hidden"; 
+      visibilityChange = "visibilitychange"; 
+  } else if (typeof document.msHidden !== "undefined") { 
+      hidden = "msHidden"; 
+      visibilityChange = "msvisibilitychange"; 
+  } else if (typeof document.webkitHidden !== "undefined") { 
+      hidden = "webkitHidden"; 
+      visibilityChange = "webkitvisibilitychange"; 
+  } 
+
+  function handleVisibilityChange(event) { 
+      // Check if the event target is the submit button
+      if (event.target.tagName.toLowerCase() !== 'button') {
+          if (document[hidden]) { 
+              // User switched to another tab or minimized the window
+              alert("Please focus on the exam tab.");
+          } 
+      }
+  } 
+
+  // Warn user when they switch to another tab
+  document.addEventListener(visibilityChange, handleVisibilityChange, false);
+
+  // Remove the beforeunload event listener for the submit exam button
+  document.getElementById('submit_exam_button').addEventListener('click', function() {
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+  });
+</script>
+
+  
+{% endblock %}
